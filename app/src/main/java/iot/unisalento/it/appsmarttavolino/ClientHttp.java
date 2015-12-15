@@ -104,6 +104,7 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
         String result="Problemi di connessione";
             try {
                 String sUrl="http://"+this.host+"/index.php/" + tabella+"/"+id;
+
                 Log.i("GET",sUrl);
             URL url = new URL(sUrl);
             HttpURLConnection client = (HttpURLConnection) url.openConnection();
