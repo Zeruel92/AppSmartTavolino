@@ -1,0 +1,65 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="iot.unisalento.it.appsmarttavolino.Registrazione">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Sembra che tu non sia Registrato! Fallo Subito compilando i campi qui di seguito!"
+        android:id="@+id/rTextView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Nome"
+        android:ems="10"
+        android:id="@+id/r_nome"
+        android:layout_below="@+id/rTextView"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Cognome"
+        android:ems="10"
+        android:id="@+id/r_cognome"
+        android:layout_below="@+id/r_nome"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/r_email"
+        android:layout_below="@+id/r_cognome"
+        android:layout_alignParentStart="true"
+        android:text="E-mail" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/r_pass"
+        android:layout_below="@+id/r_email"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/r_email"
+        android:text="Password" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Conferma"
+        android:id="@+id/r_button"
+        android:layout_below="@+id/r_pass"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>
