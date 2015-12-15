@@ -115,8 +115,9 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
             while ((s = reader.readLine()) != null) {
                 sb.append(s);
             }
-                Log.i("GET",sb.toString());
-            JSONArray array = new JSONArray(sb.toString());
+                String arrayjson=sb.toString();
+                Log.i("GET",arrayjson);
+            JSONArray array = new JSONArray(arrayjson);
             result="";
             for(int i=0;i<array.length();i++) {
                 JSONObject json = array.getJSONObject(i);
