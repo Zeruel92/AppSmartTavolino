@@ -2,6 +2,8 @@ package iot.unisalento.it.appsmarttavolino;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -14,56 +16,55 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
-import java.util.Vector;
 
 public class ClientHttp extends AsyncTask<String,Integer,String> {
     private Context context;
     private final String host="ec2-52-17-122-110.eu-west-1.compute.amazonaws.com";
     public ClientHttp (Context c){
-        this.context=c;
+        this.context=c.getApplicationContext();
     }
     @Override
     protected String doInBackground(String... params) {
         String result="";
-        String request=params[0];
-        String tabella=params[1];
-        if(request.equals("POST")) {
-            if (tabella.equals("Utente")) {
-                String nome = params[2];
-                String cognome = params[3];
-                String email = params[4];
-                String password = params[5];
-                String token = params[6];
-                postProcess(tabella, nome, cognome, email, password, token);
-            }
-            else {
-                String idOpera=params[2];
-                postProcess(tabella,idOpera);
-            }
-        }
-        else if(request.equals("GET")){
-                String id="0";
-                if(!tabella.equals("Utente")) {
+        if(haveInternetConnection(this.context)) {
+            String request = params[0];
+            String tabella = params[1];
+            if (request.equals("POST")) {
+                if (tabella.equals("Utente")) {
+                    String nome = params[2];
+                    String cognome = params[3];
+                    String email = params[4];
+                    String password = params[5];
+                    String token = params[6];
+                    postProcess(tabella, nome, cognome, email, password, token);
+                } else {
+                    String idOpera = params[2];
+                    postProcess(tabella, idOpera);
+                }
+            } else if (request.equals("GET")) {
+                String id = "0";
+                if (!tabella.equals("Utente")) {
                     if (params.length > 2) {
                         id = params[2];
                     }
                     result = getProcess(tabella, id);
-                }
-                else{
-                    String token=params[2];
-                    result=getProcess(token);
+                } else {
+                    String token = params[2];
+                    result = getProcess(token);
                 }
             }
-        publishProgress(100);
+            publishProgress(100);
+        }
+        else{
+            result="Rete Assente!Riprova più tardi";
+        }
         return result;
     }
 
@@ -89,7 +90,7 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
             while ((inputLine = reader.readLine()) != null) {
                 sb.append(inputLine);
             }
-            String prova = sb.toString();
+           // String prova = sb.toString();
             reader.close();
             in.close();
             client.disconnect();
@@ -127,7 +128,7 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
             while ((inputLine = reader.readLine()) != null) {
                 sb.append(inputLine);
             }
-            String prova = sb.toString();
+          //  String prova = sb.toString();
             reader.close();
             in.close();
             client.disconnect();
@@ -148,18 +149,17 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
         String result="Problemi di connessione";
             try {
                 String sUrl="http://"+this.host+"/index.php/" + tabella+"/"+id;
-
-            URL url = new URL(sUrl);
-            HttpURLConnection client = (HttpURLConnection) url.openConnection();
-            InputStream in = new BufferedInputStream(client.getInputStream());
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            String s = null;
-            StringBuffer sb = new StringBuffer();
-            while ((s = reader.readLine()) != null) {
-                sb.append(s);
-            }
-                String arrayjson=sb.toString();
-                if(!arrayjson.equals("null")) {
+                URL url = new URL(sUrl);
+                HttpURLConnection client = (HttpURLConnection) url.openConnection();
+                InputStream in = new BufferedInputStream(client.getInputStream());
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                String s = null;
+                StringBuffer sb = new StringBuffer();
+                while ((s = reader.readLine()) != null) {
+                    sb.append(s);
+                }
+                String arrayjson = sb.toString();
+                if (!arrayjson.equals("null")) {
                     JSONArray array = new JSONArray(arrayjson);
                     result = "";
                     for (int i = 0; i < array.length(); i++) {
@@ -171,9 +171,8 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
                             result += key + " " + value + "\n";
                         }
                     }
-                }
-                else{
-                    result="";
+                } else {
+                    result = "";
                 }
                 reader.close();
                 in.close();
@@ -187,43 +186,68 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
     private String getProcess(String token){
         String result="Problemi di connessione";
         try {
-            String sUrl="http://"+this.host+"/index.php/Utente/token/"+token;
-            URL url = new URL(sUrl);
-            HttpURLConnection client = (HttpURLConnection) url.openConnection();
-            InputStream in = new BufferedInputStream(client.getInputStream());
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            String s = null;
-            StringBuffer sb = new StringBuffer();
-            while ((s = reader.readLine()) != null) {
-                sb.append(s);
-            }
-            String arrayjson=sb.toString();
-            if(!arrayjson.equals("null")) {
-                JSONArray array = new JSONArray(arrayjson);
-                result = "";
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject json = array.getJSONObject(i);
-                    Iterator<String> iter = json.keys();
-                    while (iter.hasNext()) {
-                        String key = iter.next();
-                        String value = json.getString(key);
-                        result += key + " " + value + "\n";
-                    }
+            String sUrl = "http://" + this.host + "/index.php/Utente/token/" + token;
+                URL url = new URL(sUrl);
+                HttpURLConnection client = (HttpURLConnection) url.openConnection();
+                InputStream in = new BufferedInputStream(client.getInputStream());
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                String s = null;
+                StringBuffer sb = new StringBuffer();
+                while ((s = reader.readLine()) != null) {
+                    sb.append(s);
                 }
+                String arrayjson = sb.toString();
+                if (!arrayjson.equals("null")) {
+                    JSONArray array = new JSONArray(arrayjson);
+                    result = "";
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject json = array.getJSONObject(i);
+                        Iterator<String> iter = json.keys();
+                        while (iter.hasNext()) {
+                            String key = iter.next();
+                            String value = json.getString(key);
+                            result += key + " " + value + "\n";
+                        }
+                    }
+                } else {
+                    result = "";
+                }
+                reader.close();
+                in.close();
+                client.disconnect();
+            }catch(Exception e){
+                Toast.makeText(this.context, "Errore di rete Riprovare più tardi", Toast.LENGTH_SHORT).show();
             }
-            else{
-                result="";
-            }
-            reader.close();
-            in.close();
-            client.disconnect();
-        }catch(Exception e){
-            Toast.makeText(this.context, "Errore di rete Riprovare più tardi", Toast.LENGTH_SHORT).show();
-        }
+
         return result;
     }
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
+        try {
+            if(s.equals("Rete Assente!Riprova più tardi"))
+                Toast.makeText(this.context, "Rete Assente! Riprova più tardi", Toast.LENGTH_LONG).show();
+        }catch (Exception e) {
+            Log.e("RETE", e.getMessage());
+        }
+    }
+    public boolean haveInternetConnection(Context contesto) {
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+        try {
+            ConnectivityManager cm = (ConnectivityManager) contesto.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+            for (NetworkInfo ni : netInfo) {
+                if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                    if (ni.isConnected())
+                        haveConnectedWifi = true;
+                if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                    if (ni.isConnected())
+                        haveConnectedMobile = true;
+            }
+        }catch (Exception e){
+            Log.e("RETE",e.getMessage());
+        }
+        return haveConnectedWifi || haveConnectedMobile;
     }
 }
