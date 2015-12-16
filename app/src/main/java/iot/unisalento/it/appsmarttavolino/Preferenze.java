@@ -31,6 +31,8 @@ public class Preferenze extends AppCompatActivity {
             testo = new ClientHttp(getApplicationContext()).execute("GET", "Utente", token).get();
             int idUtente = Integer.parseInt(testo.substring(testo.indexOf(" ") + 1, testo.indexOf("\n")));
             testo = new ClientHttp(getApplicationContext()).execute("GET", "Preferenze", Integer.toString(idUtente)).get();
+            if(testo.equals(""))
+                testo="Non hai impostato alcuna preferenza!";
             String tmp = new ClientHttp(getApplicationContext()).execute("GET", "Opera", "0").get();
             String[] comodo=tmp.split("\n");
             for(int i=0;i<comodo.length;i++){
