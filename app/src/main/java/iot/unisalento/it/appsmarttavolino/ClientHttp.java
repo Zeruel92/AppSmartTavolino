@@ -95,8 +95,7 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
             in.close();
             client.disconnect();
         }catch (Exception e){
-            Log.e("POST",e.getMessage());
-            Toast.makeText(this.context, "Errore di rete Riprovare più tardi", Toast.LENGTH_SHORT).show();
+            Log.e("POST", e.getMessage());
         }
     }
 
@@ -141,8 +140,7 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
             editor.putString("token",token);
             editor.commit();
         }catch(Exception e){
-            //do nothing
-            Toast.makeText(this.context, "Errore di rete Riprovare più tardi", Toast.LENGTH_SHORT).show();
+            Log.e("POST",e.getMessage());
         }
     }
     private String getProcess(String tabella,String id){
@@ -178,8 +176,7 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
                 in.close();
                 client.disconnect();
         }catch(Exception e){
-                Log.e("Preferenze",e.getMessage());
-                Toast.makeText(this.context, "Errore di rete Riprovare più tardi", Toast.LENGTH_SHORT).show();
+                result="Problema di Rete!";
         }
         return result;
     }
@@ -216,7 +213,7 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
                 in.close();
                 client.disconnect();
             }catch(Exception e){
-                Toast.makeText(this.context, "Errore di rete Riprovare più tardi", Toast.LENGTH_SHORT).show();
+                result="Problema di Rete!";
             }
 
         return result;
@@ -227,6 +224,8 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
         try {
             if(s.equals("Rete Assente!Riprova più tardi"))
                 Toast.makeText(this.context, "Rete Assente! Riprova più tardi", Toast.LENGTH_LONG).show();
+            else if(s.equals("Problema di Rete!"))
+                Toast.makeText(this.context, "Errore di rete Riprovare più tardi", Toast.LENGTH_SHORT).show();
         }catch (Exception e) {
             Log.e("RETE", e.getMessage());
         }
@@ -246,7 +245,7 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
                         haveConnectedMobile = true;
             }
         }catch (Exception e){
-            Log.e("RETE",e.getMessage());
+            Log.e("RETE", e.getMessage());
         }
         return haveConnectedWifi || haveConnectedMobile;
     }
