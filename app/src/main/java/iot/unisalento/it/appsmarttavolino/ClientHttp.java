@@ -45,6 +45,10 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
                 String token = params[6];
                 postProcess(tabella, nome, cognome, email, password, token);
             }
+            else {
+                String idOpera=params[2];
+                postProcess(tabella,idOpera);
+            }
         }
         else if(request.equals("GET")){
                 String id="0";
@@ -62,6 +66,39 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
         publishProgress(100);
         return result;
     }
+
+    private void postProcess(String tabella, String idOpera) {
+        try {
+            URL url = new URL("http://" + this.host + "/index.php/" + tabella);
+            HttpURLConnection client = (HttpURLConnection) url.openConnection();
+            client.setDoOutput(true);
+            Uri.Builder builder = new Uri.Builder();
+            builder.appendQueryParameter("idOpera", idOpera);
+            String query = builder.build().getEncodedQuery();
+            OutputStream out = new BufferedOutputStream(client.getOutputStream());
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
+
+            writer.write(query);
+            writer.flush();
+
+            InputStream in = new BufferedInputStream(client.getInputStream());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+            StringBuffer sb = new StringBuffer();
+            String inputLine = "";
+            while ((inputLine = reader.readLine()) != null) {
+                sb.append(inputLine);
+            }
+            String prova = sb.toString();
+            reader.close();
+            in.close();
+            client.disconnect();
+        }catch (Exception e){
+            Log.e("POST",e.getMessage());
+            Toast.makeText(this.context, "Errore di rete Riprovare più tardi", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void postProcess(String tab,String nome,String cognome,String email,String password,String token){
         try {
             URL url = new URL("http://"+this.host+"/index.php/" + tab);
