@@ -1,5 +1,6 @@
 package iot.unisalento.it.appsmarttavolino;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,7 +19,9 @@ public class Preferenze extends AppCompatActivity {
         setContentView(R.layout.activity_preferenze);
         textView=(TextView)findViewById(R.id.pref_text);
         ClientHttp clientHttp=new ClientHttp(this);
-        clientHttp.execute("GET","Opera");
+        SharedPreferences pref=this.getSharedPreferences("appmuseo",MODE_PRIVATE);
+        String token=pref.getString("token",null);
+        clientHttp.execute("GET","Utente",token);
         String testo="Nessuna Opera trovata!";
         try {
             testo=clientHttp.get();

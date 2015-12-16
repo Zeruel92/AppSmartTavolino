@@ -36,8 +36,8 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
         String result="";
         String request=params[0];
         String tabella=params[1];
-        if(request.equals("POST")){
-            if(tabella.equals("Utente")) {
+        if(request.equals("POST")) {
+            if (tabella.equals("Utente")) {
                 String nome = params[2];
                 String cognome = params[3];
                 String email = params[4];
@@ -45,23 +45,27 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
                 String token = params[6];
                 postProcess(tabella, nome, cognome, email, password, token);
             }
-            else if(request.equals("GET")){
-                String id;
-                if(params[2]!=null)
-                    id=params[2];
-                else id="0";
-                getProcess(tabella,id);
-            }
         }
+        else if(request.equals("GET")){
+                String id="0";
+                if(!tabella.equals("Utente")) {
+                    if (params.length > 2) {
+                        id = params[2];
+                    }
+                    result = getProcess(tabella, id);
+                }
+                else{
+                    String token=params[2];
+                    result=getProcess(token);
+                }
+            }
         return result;
     }
     private void postProcess(String tab,String nome,String cognome,String email,String password,String token){
         try {
             URL url = new URL("http://"+this.host+"/index.php/" + tab);
-
             HttpURLConnection client = (HttpURLConnection) url.openConnection();
             client.setDoOutput(true);
-
             Uri.Builder builder = new Uri.Builder();
             builder.appendQueryParameter("idUtente","null");
             builder.appendQueryParameter("Nome", nome);
@@ -104,8 +108,6 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
         String result="Problemi di connessione";
             try {
                 String sUrl="http://"+this.host+"/index.php/" + tabella+"/"+id;
-
-                Log.i("GET",sUrl);
             URL url = new URL(sUrl);
             HttpURLConnection client = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(client.getInputStream());
@@ -116,7 +118,6 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
                 sb.append(s);
             }
                 String arrayjson=sb.toString();
-                Log.i("GET",arrayjson);
             JSONArray array = new JSONArray(arrayjson);
             result="";
             for(int i=0;i<array.length();i++) {
@@ -129,7 +130,37 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
                 }
             }
         }catch(Exception e){
-            e.printStackTrace();
+                Toast.makeText(this.context, "Errore di rete Riprovare più tardi", Toast.LENGTH_SHORT).show();
+        }
+        return result;
+    }
+    private String getProcess(String token){
+        String result="Problemi di connessione";
+        try {
+            String sUrl="http://"+this.host+"/index.php/Utente/token/"+token;
+            URL url = new URL(sUrl);
+            HttpURLConnection client = (HttpURLConnection) url.openConnection();
+            InputStream in = new BufferedInputStream(client.getInputStream());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String s = null;
+            StringBuffer sb = new StringBuffer();
+            while ((s = reader.readLine()) != null) {
+                sb.append(s);
+            }
+            String arrayjson=sb.toString();
+            JSONArray array = new JSONArray(arrayjson);
+            result="";
+            for(int i=0;i<array.length();i++) {
+                JSONObject json = array.getJSONObject(i);
+                Iterator<String> iter = json.keys();
+                while (iter.hasNext()) {
+                    String key = iter.next();
+                    String value = json.getString(key);
+                    result+=key+" "+value+"\n";
+                }
+            }
+        }catch(Exception e){
+            Toast.makeText(this.context, "Errore di rete Riprovare più tardi", Toast.LENGTH_SHORT).show();
         }
         return result;
     }
