@@ -59,6 +59,7 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
                     result=getProcess(token);
                 }
             }
+        publishProgress(100);
         return result;
     }
     private void postProcess(String tab,String nome,String cognome,String email,String password,String token){
@@ -90,6 +91,8 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
                 sb.append(inputLine);
             }
             String prova = sb.toString();
+            reader.close();
+            in.close();
             client.disconnect();
             SharedPreferences preferences=context.getSharedPreferences("appmuseo", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor= preferences.edit();
@@ -108,6 +111,7 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
         String result="Problemi di connessione";
             try {
                 String sUrl="http://"+this.host+"/index.php/" + tabella+"/"+id;
+
             URL url = new URL(sUrl);
             HttpURLConnection client = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(client.getInputStream());
@@ -118,18 +122,27 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
                 sb.append(s);
             }
                 String arrayjson=sb.toString();
-            JSONArray array = new JSONArray(arrayjson);
-            result="";
-            for(int i=0;i<array.length();i++) {
-                JSONObject json = array.getJSONObject(i);
-                Iterator<String> iter = json.keys();
-                while (iter.hasNext()) {
-                    String key = iter.next();
-                    String value = json.getString(key);
-                    result+=key+" "+value+"\n";
+                if(!arrayjson.equals("null")) {
+                    JSONArray array = new JSONArray(arrayjson);
+                    result = "";
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject json = array.getJSONObject(i);
+                        Iterator<String> iter = json.keys();
+                        while (iter.hasNext()) {
+                            String key = iter.next();
+                            String value = json.getString(key);
+                            result += key + " " + value + "\n";
+                        }
+                    }
                 }
-            }
+                else{
+                    result="";
+                }
+                reader.close();
+                in.close();
+                client.disconnect();
         }catch(Exception e){
+                Log.e("Preferenze",e.getMessage());
                 Toast.makeText(this.context, "Errore di rete Riprovare più tardi", Toast.LENGTH_SHORT).show();
         }
         return result;
@@ -148,20 +161,32 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
                 sb.append(s);
             }
             String arrayjson=sb.toString();
-            JSONArray array = new JSONArray(arrayjson);
-            result="";
-            for(int i=0;i<array.length();i++) {
-                JSONObject json = array.getJSONObject(i);
-                Iterator<String> iter = json.keys();
-                while (iter.hasNext()) {
-                    String key = iter.next();
-                    String value = json.getString(key);
-                    result+=key+" "+value+"\n";
+            if(!arrayjson.equals("null")) {
+                JSONArray array = new JSONArray(arrayjson);
+                result = "";
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject json = array.getJSONObject(i);
+                    Iterator<String> iter = json.keys();
+                    while (iter.hasNext()) {
+                        String key = iter.next();
+                        String value = json.getString(key);
+                        result += key + " " + value + "\n";
+                    }
                 }
             }
+            else{
+                result="";
+            }
+            reader.close();
+            in.close();
+            client.disconnect();
         }catch(Exception e){
             Toast.makeText(this.context, "Errore di rete Riprovare più tardi", Toast.LENGTH_SHORT).show();
         }
         return result;
+    }
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
     }
 }

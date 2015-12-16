@@ -12,7 +12,33 @@
         android:layout_height="wrap_content"
         android:text="Nessuna preferenza trovata!"
         android:id="@+id/pref_text"
+        android:layout_below="@+id/textView3"
+        android:layout_alignEnd="@+id/textView3" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Le tue Preferenze"
+        android:id="@+id/textView3"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="71dp" />
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Opere del Museo"
+        android:id="@+id/textView4"
+        android:layout_below="@+id/pref_text"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Opere"
+        android:id="@+id/pref_opere"
+        android:layout_below="@+id/textView4"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
