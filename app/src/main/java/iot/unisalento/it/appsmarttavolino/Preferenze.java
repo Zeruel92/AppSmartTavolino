@@ -28,7 +28,7 @@ public class Preferenze extends AppCompatActivity {
         String testo="";
         String opere="";
         try {
-            testo = new ClientHttp(getApplicationContext()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "GET", "Utente", token).get();
+            testo = new ClientHttp(getApplicationContext()).execute("GET", "Utente", token).get();
             int idUtente = Integer.parseInt(testo.substring(testo.indexOf(" ") + 1, testo.indexOf("\n")));
             testo = new ClientHttp(getApplicationContext()).execute("GET", "Preferenze", Integer.toString(idUtente)).get();
             String tmp = new ClientHttp(getApplicationContext()).execute("GET", "Opera", "0").get();
