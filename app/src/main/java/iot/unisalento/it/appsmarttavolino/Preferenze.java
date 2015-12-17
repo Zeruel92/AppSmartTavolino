@@ -1,9 +1,8 @@
 package iot.unisalento.it.appsmarttavolino;
 
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -42,6 +41,7 @@ public class Preferenze extends AppCompatActivity {
                 if(comodo[i].contains("Nome")){
                     comodo[i]=comodo[i].substring(comodo[i].indexOf("Nome")+5);
                     opere+=comodo[i]+"\n";
+                   // this.addContentView(new Button(this.getApplicationContext()));
                 }
             }
         } catch (Exception e) {
