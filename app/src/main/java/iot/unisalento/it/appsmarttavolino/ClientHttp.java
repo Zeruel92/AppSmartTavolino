@@ -156,6 +156,7 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
                 while ((s = reader.readLine()) != null) {
                     sb.append(s);
                 }
+
                 String arrayjson = sb.toString();
                 if (!arrayjson.equals("null")) {
                     JSONArray array = new JSONArray(arrayjson);

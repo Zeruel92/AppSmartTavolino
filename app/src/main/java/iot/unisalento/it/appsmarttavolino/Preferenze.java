@@ -34,7 +34,7 @@ public class Preferenze extends AppCompatActivity {
             if(testo.equals(""))
                 testo="Non hai impostato alcuna preferenza!";
             else{
-                //TODO Implementare gestione delle preferenze
+            //TODO Implementare gestione delle preferenze
             }
             String tmp = new ClientHttp(getApplicationContext()).execute("GET", "Opera", "0").get();
             String[] comodo=tmp.split("\n");
