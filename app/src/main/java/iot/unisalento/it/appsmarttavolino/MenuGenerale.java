@@ -7,9 +7,8 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
-import android.os.Parcelable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -67,8 +66,8 @@ public class MenuGenerale extends AppCompatActivity implements NfcAdapter.Create
     public NdefMessage createNdefMessage(NfcEvent event) {
 
         String stringOut = pref.getString("token",null);
-        byte[] bytesOut = new String("Application/IoT").getBytes();
-        NdefRecord ndefRecordOut= NdefRecord.createMime(stringOut,bytesOut);
+        String bytesOut = "Application/IoT";
+        NdefRecord ndefRecordOut= NdefRecord.createMime(bytesOut,stringOut.getBytes());
         NdefMessage ndefMessageout = new NdefMessage(ndefRecordOut);
         return ndefMessageout;
     }
