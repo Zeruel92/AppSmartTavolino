@@ -1,55 +1,88 @@
 package iot.unisalento.it.appsmarttavolino;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class Preferenze extends AppCompatActivity {
 
     private TextView textView;
     private TextView textView1;
-
+    private LinearLayout ll;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_preferenze);
-        textView=(TextView)findViewById(R.id.pref_text);
-        textView1=(TextView)findViewById(R.id.pref_opere);
-        SharedPreferences pref=this.getSharedPreferences("appmuseo",MODE_PRIVATE);
+        setContentView(R.layout.pref_layout);
+        /*textView=(TextView)findViewById(R.id.pref_text);
+        textView1=(TextView)findViewById(R.id.pref_opere);*/
+        textView=new TextView(getApplicationContext());
+        textView.setTextColor(Color.BLACK);
+      //  textView1.setTextSize(4);
+        textView1=new TextView(getApplicationContext());
+        textView.setTextSize(30);
+        textView1.setTextColor(Color.BLACK);
+        ll=(LinearLayout) findViewById(R.id.pref_layout);
+        ll.addView(textView);
+        textView.setText("Le tue preferenze");
+        SharedPreferences pref=this.getSharedPreferences("appmuseo", MODE_PRIVATE);
         String token=pref.getString("token", null);
-        String testo="Carico Le opere!";
-        textView.setText(testo);
         updateUi(token);
     }
     void updateUi(String token){
         String testo="";
         String opere="";
+        int idUtente =-1;
         try {
             testo = new ClientHttp(getApplicationContext()).execute("GET", "Utente", token).get();
-            int idUtente = Integer.parseInt(testo.substring(testo.indexOf(" ") + 1, testo.indexOf("\n")));
-            testo = new ClientHttp(getApplicationContext()).execute("GET", "Preferenze", Integer.toString(idUtente)).get();
-            if(testo.equals(""))
-                testo="Non hai impostato alcuna preferenza!";
-            else{
-            //TODO Implementare gestione delle preferenze
+            String tmp1[]=testo.split("\n");
+            for(int i =0;i<tmp1.length;i++) {
+                if(tmp1[i].contains("idUtente"))
+                     idUtente = Integer.parseInt(tmp1[i].substring(tmp1[i].indexOf(" ") + 1));
             }
+            testo = new ClientHttp(getApplicationContext()).execute("GET", "Preferenze", Integer.toString(idUtente)).get();
+            if(testo.equals("")) {
+                TextView nopref = new TextView(getApplicationContext());
+                ll.addView(nopref);
+                nopref.setTextColor(Color.DKGRAY);
+                nopref.setText("Non hai inserito nesssuna preferenza,pitucchiusu de merda!");
+            }
+            else{
+                String tmp[]=testo.split("\n");
+                for(int i=0;i<tmp.length;i++){
+                    if(tmp[i].contains("NomeOpera")){
+                        Button b=new Button(getApplicationContext());
+                        ll.addView(b);
+                        b.setText(tmp[i].substring(tmp[i].indexOf(" ") + 1));
+                    }
+                }
+            }
+            ll.addView(textView1);
+            textView1.setText("Opere presenti nel Museo");
+            textView1.setTextSize(30);
             String tmp = new ClientHttp(getApplicationContext()).execute("GET", "Opera", "0").get();
             String[] comodo=tmp.split("\n");
+           // RelativeLayout rl=(RelativeLayout)findViewById(R.id.pref_layout);
             for(int i=0;i<comodo.length;i++){
                 if(comodo[i].contains("Nome")){
-                    comodo[i]=comodo[i].substring(comodo[i].indexOf("Nome")+5);
-                    opere+=comodo[i]+"\n";
-                   // this.addContentView(new Button(this.getApplicationContext()));
+                    comodo[i]=comodo[i].substring(comodo[i].indexOf(" ")+1);
+                   // opere+=comodo[i]+"\n";
+                    Button buttone=new Button(getApplicationContext());
+                    ll.addView(buttone);
+                    buttone.setText(comodo[i]);
+
                 }
             }
         } catch (Exception e) {
             testo="Problemi di rete";
             Log.e("Preferenze",e.getMessage());
         }
-        textView.setText(testo);
-        textView1.setText(opere);
+
+
         //TODO Aggiungere controlli per aggiungere preferenze
     }
 }
