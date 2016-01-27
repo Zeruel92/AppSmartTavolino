@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class Preferenze extends AppCompatActivity {
+public class Preferenze extends AppCompatActivity{
 
     private TextView textView;
     private TextView textView1;
@@ -18,11 +18,8 @@ public class Preferenze extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pref_layout);
-        /*textView=(TextView)findViewById(R.id.pref_text);
-        textView1=(TextView)findViewById(R.id.pref_opere);*/
         textView=new TextView(getApplicationContext());
         textView.setTextColor(Color.BLACK);
-      //  textView1.setTextSize(4);
         textView1=new TextView(getApplicationContext());
         textView.setTextSize(30);
         textView1.setTextColor(Color.BLACK);
@@ -56,6 +53,7 @@ public class Preferenze extends AppCompatActivity {
                 for(int i=0;i<tmp.length;i++){
                     if(tmp[i].contains("NomeOpera")){
                         Button b=new Button(getApplicationContext());
+                        b.setOnClickListener(new DelPrefListener(this));
                         ll.addView(b);
                         b.setText(tmp[i].substring(tmp[i].indexOf(" ") + 1));
                     }
@@ -66,23 +64,19 @@ public class Preferenze extends AppCompatActivity {
             textView1.setTextSize(30);
             String tmp = new ClientHttp(getApplicationContext()).execute("GET", "Opera", "0").get();
             String[] comodo=tmp.split("\n");
-           // RelativeLayout rl=(RelativeLayout)findViewById(R.id.pref_layout);
             for(int i=0;i<comodo.length;i++){
                 if(comodo[i].contains("Nome")){
                     comodo[i]=comodo[i].substring(comodo[i].indexOf(" ")+1);
-                   // opere+=comodo[i]+"\n";
                     Button buttone=new Button(getApplicationContext());
+                    buttone.setOnClickListener(new AddPrefListener(this));
                     ll.addView(buttone);
                     buttone.setText(comodo[i]);
 
                 }
             }
         } catch (Exception e) {
-            testo="Problemi di rete";
             Log.e("Preferenze",e.getMessage());
         }
-
-
         //TODO Aggiungere controlli per aggiungere preferenze
     }
 }
