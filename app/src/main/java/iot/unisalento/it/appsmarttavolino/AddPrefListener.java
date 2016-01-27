@@ -10,6 +10,6 @@ public class AddPrefListener implements View.OnClickListener {
     }
     @Override
     public void onClick(View v) {
-        Toast.makeText(p.getApplicationContext(),"Bottene aggiungi premuto",Toast.LENGTH_LONG).show();
+        Toast.makeText(p.getApplicationContext(), Integer.toString(v.getId()), Toast.LENGTH_SHORT).show();
     }
 }

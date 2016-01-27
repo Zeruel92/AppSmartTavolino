@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Vector;
+
 public class Preferenze extends AppCompatActivity{
 
     private TextView textView;
@@ -49,14 +51,25 @@ public class Preferenze extends AppCompatActivity{
                 nopref.setText("Non hai inserito nesssuna preferenza,pitucchiusu de merda!");
             }
             else{
-                String tmp[]=testo.split("\n");
-                for(int i=0;i<tmp.length;i++){
-                    if(tmp[i].contains("NomeOpera")){
-                        Button b=new Button(getApplicationContext());
-                        b.setOnClickListener(new DelPrefListener(this));
-                        ll.addView(b);
-                        b.setText(tmp[i].substring(tmp[i].indexOf(" ") + 1));
+                String comodo[]=testo.split("\n");
+                Vector<Integer> ids=new Vector<Integer>();
+                Vector<String> names=new Vector<String>();
+                for(int i=0;i<comodo.length;i++){
+                    if(comodo[i].contains("idOpera")){
+                        comodo[i]=comodo[i].substring(comodo[i].indexOf(" ")+1);
+                        ids.addElement(Integer.parseInt(comodo[i]));
                     }
+                    else if(comodo[i].contains("NomeOpera")){
+                        comodo[i]=comodo[i].substring(comodo[i].indexOf(" ")+1);
+                        names.addElement(comodo[i]);
+                    }
+                }
+                for(int i=0;i<ids.size();i++){
+                    Button buttone=new Button(getApplicationContext());
+                    buttone.setOnClickListener(new DelPrefListener(this));
+                    ll.addView(buttone);
+                    buttone.setText(names.elementAt(i));
+                    buttone.setId(ids.elementAt(i));
                 }
             }
             ll.addView(textView1);
@@ -64,19 +77,27 @@ public class Preferenze extends AppCompatActivity{
             textView1.setTextSize(30);
             String tmp = new ClientHttp(getApplicationContext()).execute("GET", "Opera", "0").get();
             String[] comodo=tmp.split("\n");
+            Vector<Integer> ids=new Vector<Integer>();
+            Vector<String> names=new Vector<String>();
             for(int i=0;i<comodo.length;i++){
-                if(comodo[i].contains("Nome")){
+                if(comodo[i].contains("idOpera")){
                     comodo[i]=comodo[i].substring(comodo[i].indexOf(" ")+1);
-                    Button buttone=new Button(getApplicationContext());
-                    buttone.setOnClickListener(new AddPrefListener(this));
-                    ll.addView(buttone);
-                    buttone.setText(comodo[i]);
-
+                    ids.addElement(Integer.parseInt(comodo[i]));
                 }
+                else if(comodo[i].contains("Nome")){
+                    comodo[i]=comodo[i].substring(comodo[i].indexOf(" ")+1);
+                    names.addElement(comodo[i]);
+                }
+            }
+            for(int i=0;i<ids.size();i++){
+                Button buttone=new Button(getApplicationContext());
+                buttone.setOnClickListener(new AddPrefListener(this));
+                ll.addView(buttone);
+                buttone.setText(names.elementAt(i));
+                buttone.setId(ids.elementAt(i));
             }
         } catch (Exception e) {
             Log.e("Preferenze",e.getMessage());
         }
-        //TODO Aggiungere controlli per aggiungere preferenze
     }
 }
