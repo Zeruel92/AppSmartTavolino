@@ -29,8 +29,8 @@ public class MenuGenerale extends AppCompatActivity implements NfcAdapter.Create
         textView=(TextView) findViewById(R.id.mg_textView1);
         pref=this.getSharedPreferences("appmuseo", Context.MODE_PRIVATE);
         String nome= pref.getString("nome",null);
-        String stringa="Benvenuto nello SmartMuseo "+nome+": Per effettuare il login sul tavolino, poggia il telefono vicino il ricevitore NFC,";
-        stringa+="Oppure clicca su Login Senza NFC e segui le istruzioni. Oppure imposta le tue preferenze";
+        String stringa="Benvenuto nello Smart Museum "+nome+": Per effettuare il login, avvicina lo smartphone al ricevitore NFC,";
+        stringa+="oppure clicca su Login Senza NFC e segui le istruzioni.";
         textView.setText(stringa);
 
         login =(Button) findViewById(R.id.mg_nonfc);
