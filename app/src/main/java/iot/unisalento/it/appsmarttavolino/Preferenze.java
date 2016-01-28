@@ -50,7 +50,7 @@ public class Preferenze extends AppCompatActivity{
                 TextView nopref = new TextView(getApplicationContext());
                 ll.addView(nopref);
                 nopref.setTextColor(Color.DKGRAY);
-                nopref.setText("Non hai inserito nesssuna preferenza,pitucchiusu de merda!");
+                nopref.setText("Non hai inserito nesssuna preferenza!");
             }
             else{
                 String comodo[]=testo.split("\n");

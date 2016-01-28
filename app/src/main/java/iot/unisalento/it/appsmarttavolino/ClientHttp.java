@@ -61,6 +61,11 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
                     result = getProcess(token);
                 }
             }
+            else if(request.equals("DELETE")){
+                String idUtente=params[2];
+                String idAutore=params[3];
+                deleteProcess(idUtente,idAutore);
+            }
             publishProgress(100);
         }
         else{
@@ -221,6 +226,26 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
 
         return result;
     }
+    private String deleteProcess(String idUtente,String idAutore){
+        String s = "Problema di Rete!";
+        try {
+            String sUrl = "http://" + this.host + "/index.php/Preferenze/" + idUtente + "/" + idAutore;
+            URL url = new URL(sUrl);
+            HttpURLConnection client = (HttpURLConnection) url.openConnection();
+            client.setRequestMethod("DELETE");
+            InputStream in = new BufferedInputStream(client.getInputStream());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+            StringBuffer sb = new StringBuffer();
+            while ((s = reader.readLine()) != null) {
+                sb.append(s);
+            }
+            s=sb.toString();
+        }catch(Exception e){
+            Log.e("DELETE",e.getMessage());
+        }
+        return s;
+    }
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
@@ -229,6 +254,8 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
                 Toast.makeText(this.context, "Rete Assente! Riprova più tardi", Toast.LENGTH_LONG).show();
             else if(s.equals("Problema di Rete!"))
                 Toast.makeText(this.context, "Errore di rete Riprovare più tardi", Toast.LENGTH_SHORT).show();
+            else if(s.equals("DELETE OK"))
+                Toast.makeText(this.context, "Preferenza rimossa con successo", Toast.LENGTH_SHORT).show();
         }catch (Exception e) {
             Log.e("RETE", e.getMessage());
         }
