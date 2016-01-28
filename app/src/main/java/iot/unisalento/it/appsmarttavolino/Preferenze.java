@@ -16,6 +16,7 @@ public class Preferenze extends AppCompatActivity{
     private TextView textView;
     private TextView textView1;
     private LinearLayout ll;
+    private int idUtente;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +36,7 @@ public class Preferenze extends AppCompatActivity{
     void updateUi(String token){
         String testo="";
         String opere="";
-        int idUtente =-1;
+        idUtente =-1;
         try {
             testo = new ClientHttp(getApplicationContext()).execute("GET", "Utente", token).get();
             String tmp1[]=testo.split("\n");
@@ -99,5 +100,8 @@ public class Preferenze extends AppCompatActivity{
         } catch (Exception e) {
             Log.e("Preferenze",e.getMessage());
         }
+    }
+    public int getIdUtente(){
+        return idUtente;
     }
 }

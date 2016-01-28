@@ -25,8 +25,8 @@ import java.net.URL;
 import java.util.Iterator;
 
 public class ClientHttp extends AsyncTask<String,Integer,String> {
-    private Context context;
     private final String host="ec2-52-17-122-110.eu-west-1.compute.amazonaws.com";
+    private Context context;
     public ClientHttp (Context c){
         this.context=c.getApplicationContext();
     }
@@ -45,8 +45,9 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
                     String token = params[6];
                     postProcess(tabella, nome, cognome, email, password, token);
                 } else {
-                    String idOpera = params[2];
-                    postProcess(tabella, idOpera);
+                    String idUtente = params[2];
+                    String idAutore = params[3];
+                    postProcess(tabella, idUtente,idAutore);
                 }
             } else if (request.equals("GET")) {
                 String id = "0";
@@ -68,13 +69,14 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
         return result;
     }
 
-    private void postProcess(String tabella, String idOpera) {
+    private void postProcess(String tabella, String idUtente,String idAutore) {
         try {
             URL url = new URL("http://" + this.host + "/index.php/" + tabella);
             HttpURLConnection client = (HttpURLConnection) url.openConnection();
             client.setDoOutput(true);
             Uri.Builder builder = new Uri.Builder();
-            builder.appendQueryParameter("idOpera", idOpera);
+            builder.appendQueryParameter("Utente_idUtente", idUtente);
+            builder.appendQueryParameter("Autore_idAutore",idAutore);
             String query = builder.build().getEncodedQuery();
             OutputStream out = new BufferedOutputStream(client.getOutputStream());
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
