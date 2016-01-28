@@ -27,13 +27,14 @@ public class Preferenze extends AppCompatActivity{
         textView.setTextSize(30);
         textView1.setTextColor(Color.BLACK);
         ll=(LinearLayout) findViewById(R.id.pref_layout);
-        ll.addView(textView);
         textView.setText("Le tue preferenze");
         SharedPreferences pref=this.getSharedPreferences("appmuseo", MODE_PRIVATE);
         String token=pref.getString("token", null);
         updateUi(token);
     }
     void updateUi(String token){
+        ll.removeAllViews();
+        ll.addView(textView);
         String testo="";
         String opere="";
         idUtente =-1;
