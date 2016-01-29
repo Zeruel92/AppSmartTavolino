@@ -46,8 +46,8 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
                     postProcess(tabella, nome, cognome, email, password, token);
                 } else {
                     String idUtente = params[2];
-                    String idAutore = params[3];
-                    postProcess(tabella, idUtente,idAutore);
+                    String idGenere = params[3];
+                    postProcess(tabella, idUtente,idGenere);
                 }
             } else if (request.equals("GET")) {
                 String id = "0";
@@ -63,8 +63,8 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
             }
             else if(request.equals("DELETE")){
                 String idUtente=params[2];
-                String idAutore=params[3];
-                deleteProcess(idUtente,idAutore);
+                String idGenere=params[3];
+                deleteProcess(idUtente,idGenere);
             }
             publishProgress(100);
         }
@@ -74,14 +74,14 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
         return result;
     }
 
-    private void postProcess(String tabella, String idUtente,String idAutore) {
+    private void postProcess(String tabella, String idUtente,String idGenere) {
         try {
             URL url = new URL("http://" + this.host + "/index.php/" + tabella);
             HttpURLConnection client = (HttpURLConnection) url.openConnection();
             client.setDoOutput(true);
             Uri.Builder builder = new Uri.Builder();
             builder.appendQueryParameter("Utente_idUtente", idUtente);
-            builder.appendQueryParameter("Autore_idAutore",idAutore);
+            builder.appendQueryParameter("Genere_idGenere",idGenere);
             String query = builder.build().getEncodedQuery();
             OutputStream out = new BufferedOutputStream(client.getOutputStream());
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));

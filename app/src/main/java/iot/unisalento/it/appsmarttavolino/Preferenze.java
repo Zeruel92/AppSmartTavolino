@@ -57,11 +57,11 @@ public class Preferenze extends AppCompatActivity{
                 Vector<Integer> ids=new Vector<Integer>();
                 Vector<String> names=new Vector<String>();
                 for(int i=0;i<comodo.length;i++){
-                    if(comodo[i].contains("idOpera")){
+                    if(comodo[i].contains("idGenere")){
                         comodo[i]=comodo[i].substring(comodo[i].indexOf(" ")+1);
                         ids.addElement(Integer.parseInt(comodo[i]));
                     }
-                    else if(comodo[i].contains("NomeOpera")){
+                    else if(comodo[i].contains("NomeGenere")){
                         comodo[i]=comodo[i].substring(comodo[i].indexOf(" ")+1);
                         names.addElement(comodo[i]);
                     }
@@ -77,12 +77,12 @@ public class Preferenze extends AppCompatActivity{
             ll.addView(textView1);
             textView1.setText("Opere presenti nel Museo");
             textView1.setTextSize(30);
-            String tmp = new ClientHttp(getApplicationContext()).execute("GET", "Opera", "0").get();
+            String tmp = new ClientHttp(getApplicationContext()).execute("GET", "Genere", "0").get();
             String[] comodo=tmp.split("\n");
             Vector<Integer> ids=new Vector<Integer>();
             Vector<String> names=new Vector<String>();
             for(int i=0;i<comodo.length;i++){
-                if(comodo[i].contains("idOpera")){
+                if(comodo[i].contains("idGenere")){
                     comodo[i]=comodo[i].substring(comodo[i].indexOf(" ")+1);
                     ids.addElement(Integer.parseInt(comodo[i]));
                 }

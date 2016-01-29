@@ -12,16 +12,9 @@ public class DelPrefListener implements View.OnClickListener {
     }
     @Override
     public void onClick(View v) {
-        //Toast.makeText(p.getApplicationContext(), Integer.toString(v.getId()), Toast.LENGTH_LONG).show();
-        String idOpera=Integer.toString(v.getId());
+        String idGenere=Integer.toString(v.getId());
         try {
-            String idAutore = "";
-            String tmp[] = new ClientHttp(p.getApplicationContext()).execute("GET", "Opera", idOpera).get().split("\n");
-            for (int i = 0; i < tmp.length; i++) {
-                if (tmp[i].contains("idAutore"))
-                    idAutore = tmp[i].substring(tmp[i].indexOf(" ") + 1);
-            }
-            new ClientHttp(p.getApplicationContext()).execute("DELETE", "Preferenze", Integer.toString(p.getIdUtente()), idAutore);
+            new ClientHttp(p.getApplicationContext()).execute("DELETE", "Preferenze", Integer.toString(p.getIdUtente()), idGenere);
             SharedPreferences preferences=p.getSharedPreferences("appmuseo", Context.MODE_PRIVATE);
             String token=preferences.getString("token", null);
             p.updateUi(token);
