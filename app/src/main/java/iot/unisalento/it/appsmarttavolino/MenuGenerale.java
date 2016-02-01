@@ -40,10 +40,12 @@ public class MenuGenerale extends AppCompatActivity implements NfcAdapter.Create
 
         //Inizializzo l'nfc
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        if(!nfcAdapter.isEnabled()){
+            Toast.makeText(this,"Nfc spento,si prega di attivarlo",Toast.LENGTH_LONG).show();
+        }
         if(nfcAdapter==null){
-            Toast.makeText(this,"nfcAdapter==null, no NFC adapter exists",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Questo dispositivo non supporta la tecnologia NFC",Toast.LENGTH_LONG).show();
         }else{
-            Toast.makeText(this,"Set Callback(s)",Toast.LENGTH_LONG).show();
             nfcAdapter.setNdefPushMessageCallback(this, this);
             nfcAdapter.setOnNdefPushCompleteCallback(this, this);
         }
