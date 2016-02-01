@@ -3,13 +3,17 @@ package iot.unisalento.it.appsmarttavolino;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-
+/*
+ *Attività principale viene avviata all'avvio dell'app
+ *Serve a caricare i dati dell'utente dalla cache di Android se vuota presenta il menu di
+ *Registrazione/Login, altrimenti avvia il menu principale dell'app
+ */
 public class MainActivity extends AppCompatActivity {
     private SharedPreferences pref;
     private String idUtente;
