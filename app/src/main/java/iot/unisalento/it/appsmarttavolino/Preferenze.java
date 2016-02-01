@@ -84,7 +84,7 @@ public class Preferenze extends AppCompatActivity{
                 }
             }
             ll.addView(textView1);
-            textView1.setText("Opere presenti nel Museo");
+            textView1.setText("Lista dei generi disponibili:");
             textView1.setTextSize(30);
             //Effettuo la richiesta GET per scaricare la lista di tutti i generi
             String tmp = new ClientHttp(getApplicationContext()).execute("GET", "Genere", "0").get();

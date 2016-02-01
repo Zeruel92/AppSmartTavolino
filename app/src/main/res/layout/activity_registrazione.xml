@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/r_button"
-        android:text="Sei già registrato? Clicka qui ed effettua il Login!"
+        android:text="Sei già registrato? Tocca qui ed effettua il Login!"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>
