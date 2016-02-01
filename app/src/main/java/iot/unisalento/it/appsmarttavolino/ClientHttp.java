@@ -23,7 +23,13 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Iterator;
-
+/*
+ *Questa classe fornisce tutti i metodi necessari per le chiamate REST effettuate dall'app
+ *i metodi getProcess forniscono i metodi necessari per effettuare le richieste GET
+ *i metodi postProcess forniscono i metodi necessari per effettuare le richieste POST
+ *i vari metodi differiscono in base ai dati da tramettere e vengono selezionati dal metodo principale dell'AsyncTask (doInBackground(..))
+ * in base al numero di parametri passati.
+ */
 public class ClientHttp extends AsyncTask<String,Integer,String> {
     private final String host="ec2-52-17-122-110.eu-west-1.compute.amazonaws.com";
     private Context context;
