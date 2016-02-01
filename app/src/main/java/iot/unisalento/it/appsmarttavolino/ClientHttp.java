@@ -109,7 +109,6 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
             while ((inputLine = reader.readLine()) != null) {
                 sb.append(inputLine);
             }
-           // String prova = sb.toString();
             reader.close();
             in.close();
             client.disconnect();
@@ -146,7 +145,6 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
             while ((inputLine = reader.readLine()) != null) {
                 sb.append(inputLine);
             }
-          //  String prova = sb.toString();
             reader.close();
             in.close();
             client.disconnect();
