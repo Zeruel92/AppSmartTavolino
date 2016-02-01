@@ -10,7 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
+/*
+ * Classe che permette di effettuare il Login ad Utenti già registrati
+ */
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private EditText email;
@@ -28,7 +30,14 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         login = (Button) findViewById(R.id.l_button);
         login.setOnClickListener(this);
     }
-
+    /*
+     * Metodo associato al click del pulsante
+     * Effettua una richiesta GET al server REST:
+     * -Se il server risponde con i dati dell'utente richiesti tramite mail e password, vengono salvati i dati dell'utente
+     * nella cache dell'app e avvia l'interfaccia Generale
+     * -Se il server risponde con una stringa vuota l'utente non è registrato e viene visualizzato un Toast che chiede
+     * il reinserimento dei dati
+     */
     @Override
     public void onClick(View v) {
         String s_email = email.getText().toString();
