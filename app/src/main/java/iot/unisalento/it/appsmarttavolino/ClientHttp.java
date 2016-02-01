@@ -51,12 +51,18 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
                 }
             } else if (request.equals("GET")) {
                 String id = "0";
-                if (!tabella.equals("Utente")) {
+                if(tabella.equals("Login")){
+                    String email=params[2];
+                    String pass=params[3];
+                    result=getProcess(tabella,email,pass);
+                }
+                else if (!tabella.equals("Utente")) {
                     if (params.length > 2) {
                         id = params[2];
                     }
                     result = getProcess(tabella, id);
-                } else {
+                }
+                else {
                     String token = params[2];
                     result = getProcess(token);
                 }
@@ -185,6 +191,45 @@ public class ClientHttp extends AsyncTask<String,Integer,String> {
                 client.disconnect();
         }catch(Exception e){
                 result="Problema di Rete!";
+        }
+        return result;
+    }
+    private String getProcess(String tabella,String email,String pass){
+        String result="Problemi di connessione";
+        try {
+            String sUrl="http://"+this.host+"/index.php/" + tabella+"/"+email+"/"+pass;
+            URL url = new URL(sUrl);
+            HttpURLConnection client = (HttpURLConnection) url.openConnection();
+            InputStream in = new BufferedInputStream(client.getInputStream());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String s = null;
+            StringBuffer sb = new StringBuffer();
+            while ((s = reader.readLine()) != null) {
+                sb.append(s);
+            }
+
+            String arrayjson = sb.toString();
+            if (!arrayjson.equals("null")) {
+                JSONArray array = new JSONArray(arrayjson);
+                result = "";
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject json = array.getJSONObject(i);
+                    Iterator<String> iter = json.keys();
+                    while (iter.hasNext()) {
+                        String key = iter.next();
+                        String value = json.getString(key);
+                        result += key + " " + value + "\n";
+                    }
+                }
+            } else {
+                result = "";
+            }
+            reader.close();
+            in.close();
+            client.disconnect();
+        }catch(Exception e){
+            result="Problema di Rete!";
+            Log.e("Login",e.getMessage());
         }
         return result;
     }
