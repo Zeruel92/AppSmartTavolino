@@ -2,10 +2,12 @@ package iot.unisalento.it.appsmarttavolino;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
-
+/*
+ *Questa classe inserisce il token nella schermata di login senza nfc caricandolo dalla cache Android
+ */
 public class NoNfcLogin extends AppCompatActivity {
     private SharedPreferences pref;
     private TextView textView;

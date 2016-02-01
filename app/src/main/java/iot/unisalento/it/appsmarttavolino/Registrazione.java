@@ -12,7 +12,10 @@ import android.widget.TextView;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
+/*
+ * Classe di registrazione nuovo utente
+ * Legge i dati dai campi e invia una richiesta POST al server REST per aggiungere un nuovo utente
+ */
 public class Registrazione extends AppCompatActivity implements View.OnClickListener{
 
     private Button confirm;
@@ -61,9 +64,13 @@ public class Registrazione extends AppCompatActivity implements View.OnClickList
 
         return super.onOptionsItemSelected(item);
     }
+    //Metodo che gestisce il pulsante di conferma o la label interattiva
 
     @Override
     public void onClick(View v) {
+        //se l'id dell'oggetto chiamante è il bottone di conferma legge i dati dai campi
+        //e invia la richiesta POST per la registrazione, in seguito se va a buon fine inserisce i dati nella cache android
+        //e avvia il menu generale
         if((v.getId())==(R.id.r_button)) {
             String nome = this.nome.getText().toString();
             String cognome = this.cognome.getText().toString();
@@ -77,6 +84,7 @@ public class Registrazione extends AppCompatActivity implements View.OnClickList
             finish();
         }
         else {
+            //Se l'id dell'oggetto chiamante è la label interattiva avvia la schermata di Login
             Intent intent= new Intent(Registrazione.this,Login.class);
             startActivity(intent);
             finish();
