@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.Vector;
@@ -19,6 +20,7 @@ public class Preferenze extends AppCompatActivity{
     private TextView textView1;
     private LinearLayout ll;
     private int idUtente;
+    private ScrollView scroller; //Serve per scrollare la visuale quando la view è popolata da molti elementi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +31,9 @@ public class Preferenze extends AppCompatActivity{
         textView1=new TextView(getApplicationContext());
         textView.setTextSize(30);
         textView1.setTextColor(Color.BLACK);
+        scroller = new ScrollView(this.getApplicationContext());
         ll=(LinearLayout) findViewById(R.id.pref_layout);
+        setContentView(scroller);
         textView.setText("Le tue preferenze");
         SharedPreferences pref=this.getSharedPreferences("appmuseo", MODE_PRIVATE);
         String token=pref.getString("token", null);
@@ -37,6 +41,7 @@ public class Preferenze extends AppCompatActivity{
     }
     //Metodo che rigenera la schermata delle preferenze
     void updateUi(String token){
+        scroller.removeAllViews();
         ll.removeAllViews();
         ll.addView(textView);
         String testo="";
@@ -110,6 +115,7 @@ public class Preferenze extends AppCompatActivity{
                 buttone.setText(names.elementAt(i));
                 buttone.setId(ids.elementAt(i));
             }
+            scroller.addView(ll);
         } catch (Exception e) {
             Log.e("Preferenze",e.getMessage());
         }
