@@ -14,6 +14,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/*
+ *Questa classe implementa l'interfaccia Generale dell'app dopo aver effettuato Login/Registrazione
+ * Inoltre fornisce l'implementazione dell'NFC p2p
+ */
 public class MenuGenerale extends AppCompatActivity implements NfcAdapter.CreateNdefMessageCallback, NfcAdapter.OnNdefPushCompleteCallback, View.OnClickListener {
 
     private TextView textView;
@@ -46,8 +50,8 @@ public class MenuGenerale extends AppCompatActivity implements NfcAdapter.Create
         if(nfcAdapter==null){
             Toast.makeText(this,"Questo dispositivo non supporta la tecnologia NFC",Toast.LENGTH_LONG).show();
         }else{
-            nfcAdapter.setNdefPushMessageCallback(this, this);
-            nfcAdapter.setOnNdefPushCompleteCallback(this, this);
+            nfcAdapter.setNdefPushMessageCallback(this, this);//Setta la callback al listener (createNdefMessage())
+            nfcAdapter.setOnNdefPushCompleteCallback(this, this);//setta la callback al listener( onNdefPushComplete())
         }
     }
     @Override
@@ -55,7 +59,7 @@ public class MenuGenerale extends AppCompatActivity implements NfcAdapter.Create
         super.onResume();
     }
     @Override
-    public NdefMessage createNdefMessage(NfcEvent event) {
+    public NdefMessage createNdefMessage(NfcEvent event) {//Crea il messaggio NDEF, viene invocato quando il telefono viene avvicinato al lettore
         String stringOut = pref.getString("token",null);
         String bytesOut = "Application/IoT";
         NdefRecord ndefRecordOut= NdefRecord.createMime(bytesOut,stringOut.getBytes());
@@ -63,7 +67,7 @@ public class MenuGenerale extends AppCompatActivity implements NfcAdapter.Create
         return ndefMessageout;
     }
     @Override
-    public void onNdefPushComplete(NfcEvent event) {
+    public void onNdefPushComplete(NfcEvent event) {//Mostra una notifica se lo scambio è avvenuto correttamente
 
         final String eventString = "onNdefPushComplete\n" + event.toString();
         runOnUiThread(new Runnable() {
